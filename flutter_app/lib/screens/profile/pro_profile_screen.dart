@@ -24,6 +24,7 @@ import '../../services/pro_service.dart';
 import '../../utils/constants.dart';
 import '../../widgets/trust_badge.dart';
 import '../../models/booking_model.dart';
+import '../booking/booking_flow_screen.dart';
 
 class ProProfileScreen extends StatefulWidget {
   final String proUserId; // The pro's user ID (from the map pin)
@@ -161,12 +162,20 @@ class _ProProfileScreenState extends State<ProProfileScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // TODO: Navigate to booking flow
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Booking flow coming soon!'),
-                          ),
-                        );
+                        if (_proDetail != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => BookingFlowScreen(
+                                proUserId: widget.proUserId,
+                                proName: widget.proName,
+                                services: _proDetail!.services,
+                                bookingType: _proDetail!.profile.isAvailableNow
+                                    ? 'instant'
+                                    : 'scheduled',
+                              ),
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppConstants.primaryColor,

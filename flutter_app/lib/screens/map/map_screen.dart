@@ -35,6 +35,9 @@ import '../../providers/map_provider.dart';
 import '../../services/pro_service.dart';
 import '../../utils/constants.dart';
 import '../../widgets/pro_preview_card.dart';
+import '../booking/booking_flow_screen.dart';
+import '../booking/bookings_list_screen.dart';
+import '../chat/conversations_screen.dart';
 import '../profile/pro_profile_screen.dart';
 
 class MapScreen extends StatefulWidget {
@@ -225,11 +228,11 @@ class _MapScreenState extends State<MapScreen> {
       case 0:
         return _buildMapView(location, mapProvider);
       case 1:
-        return _buildBookingsPlaceholder();
+        return _buildBookingsTab();
       case 2:
         return _buildMyProsPlaceholder();
       case 3:
-        return _buildChatPlaceholder();
+        return _buildChatTab();
       default:
         return _buildMapView(location, mapProvider);
     }
@@ -494,13 +497,24 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                 );
               },
-              onBookNow: () {
-                // TODO: Navigate to booking flow
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Booking flow coming soon!'),
-                  ),
-                );
+              onBookNow: () async {
+                final pro = mapProvider.selectedPro!;
+                // Fetch the pro's services so the booking screen can list them
+                final proService = ProService();
+                final proDetail =
+                    await proService.fetchProDetail(pro.userId);
+                if (proDetail != null && context.mounted) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => BookingFlowScreen(
+                        proUserId: pro.userId,
+                        proName: pro.displayName,
+                        services: proDetail.services,
+                        bookingType: 'instant',
+                      ),
+                    ),
+                  );
+                }
               },
               onClose: () => mapProvider.deselectPro(),
             ),
@@ -587,26 +601,19 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   // ============================================
-  // PLACEHOLDER SCREENS (Other tabs)
+  // TAB SCREENS
   // ============================================
-  Widget _buildBookingsPlaceholder() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.calendar_today, size: 64, color: Colors.grey),
-          SizedBox(height: 16),
-          Text('Your Bookings', style: TextStyle(fontSize: 18)),
-          SizedBox(height: 8),
-          Text(
-            'Upcoming and past bookings will appear here.',
-            style: TextStyle(color: Colors.grey),
-          ),
-        ],
-      ),
+
+  /// Bookings tab — shows all active and past bookings.
+  Widget _buildBookingsTab() {
+    final auth = context.read<AuthProvider>();
+    return BookingsListScreen(
+      isPro: auth.currentUser?.userType == 'pro',
     );
   }
 
+  /// My Pros tab — shows favorited pros.
+  /// TODO: Build a dedicated favorites screen. For now, placeholder.
   Widget _buildMyProsPlaceholder() {
     return const Center(
       child: Column(
@@ -625,21 +632,8 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  Widget _buildChatPlaceholder() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.chat, size: 64, color: Colors.grey),
-          SizedBox(height: 16),
-          Text('Messages', style: TextStyle(fontSize: 18)),
-          SizedBox(height: 8),
-          Text(
-            'Chat with your pros and clients here.',
-            style: TextStyle(color: Colors.grey),
-          ),
-        ],
-      ),
-    );
+  /// Chat tab — shows all active conversations.
+  Widget _buildChatTab() {
+    return const ConversationsScreen();
   }
 }
