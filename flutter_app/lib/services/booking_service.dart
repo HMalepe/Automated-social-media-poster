@@ -166,7 +166,7 @@ class BookingService {
   // START JOB
   // ============================================
   // Pro arrives and taps "Start Job".
-  // Triggers: timer starts, emergency contact notified, payment captured.
+  // Triggers: timer starts, payment captured.
 
   Future<bool> startJob(String bookingId) async {
     try {
@@ -180,7 +180,6 @@ class BookingService {
           .eq('id', bookingId)
           .eq('pro_id', _supabase.auth.currentUser!.id);
 
-      // TODO: Send SMS to emergency contact via Twilio
       // TODO: Capture payment from escrow
 
       return true;

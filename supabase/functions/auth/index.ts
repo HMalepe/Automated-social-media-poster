@@ -1,14 +1,12 @@
 // ============================================
 // VouchSA Auth Edge Function
 // ============================================
-// Handles phone authentication with OTP via Twilio.
+// Handles phone authentication with OTP via Supabase Auth.
 //
 // ENDPOINTS:
 // POST /auth/send-otp    - Send OTP to phone number
 // POST /auth/verify-otp  - Verify OTP code
 // POST /auth/register    - Create user profile after verification
-//
-// EXTERNAL SERVICE: Twilio (for SMS)
 // ============================================
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
@@ -38,8 +36,8 @@ serve(async (req) => {
     // ============================================
     // SEND OTP
     // ============================================
-    // Uses Supabase's built-in phone auth (which uses Twilio under the hood).
-    // You configure Twilio in: Supabase Dashboard → Authentication → Providers → Phone
+    // Uses Supabase's built-in phone auth.
+    // Configure in: Supabase Dashboard → Authentication → Providers → Phone
     if (url.pathname.endsWith('/send-otp')) {
       const { phone } = body;
 

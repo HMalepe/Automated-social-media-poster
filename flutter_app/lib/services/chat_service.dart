@@ -7,7 +7,7 @@
 // 2. Only the client and pro in that booking can see the messages
 // 3. Messages are text-only (no photos, for safety)
 // 4. The conversation auto-expires 48 hours after job completion
-// 5. Messages arrive in real-time (like WhatsApp) using Supabase Realtime
+// 5. Messages arrive in real-time using Supabase Realtime
 //
 // WHAT IS A STREAM?
 // A Stream is like a pipe that data flows through continuously.

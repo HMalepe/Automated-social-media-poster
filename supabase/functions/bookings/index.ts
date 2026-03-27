@@ -5,7 +5,7 @@
 // Handles the entire booking lifecycle:
 // 1. Client creates a booking (instant or scheduled)
 // 2. Pro accepts or declines
-// 3. Pro starts the job (triggers safety features)
+// 3. Pro starts the job
 // 4. Pro completes the job (triggers payment + vouch prompt)
 // 5. Client can dispute if something went wrong
 // ============================================
@@ -213,13 +213,11 @@ serve(async (req: Request) => {
     // ============================================
     // PUT /bookings/:id/start - Pro starts the job
     // ============================================
-    // This triggers safety features:
-    // - Emergency contact gets an SMS with tracking link
-    // - Live tracking begins
+    // Live tracking begins
     if (req.method === "PUT" && bookingId && subAction === "start") {
       const { data: booking, error } = await supabaseClient
         .from("bookings")
-        .select("*, client:client_id(emergency_contact_phone)")
+        .select("*")
         .eq("id", bookingId)
         .eq("pro_id", user.id)
         .eq("status", "accepted")
@@ -246,12 +244,6 @@ serve(async (req: Request) => {
         .eq("id", bookingId);
 
       if (updateError) throw updateError;
-
-      // TODO: Send SMS to emergency contact via Twilio
-      // This would be something like:
-      // await sendSMS(booking.client.emergency_contact_phone,
-      //   `Your contact has started a service with a VouchSA pro. Track live: https://vouchsa.co.za/track/${bookingId}`
-      // );
 
       // Notify client that job has started
       await supabaseAdmin.from("notifications").insert({

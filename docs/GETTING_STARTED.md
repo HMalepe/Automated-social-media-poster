@@ -61,7 +61,7 @@ Think of it as a giant spreadsheet in the cloud that your app reads and writes t
 18. Click "Authentication" in the left sidebar
 19. Click "Providers"
 20. Find "Phone" and toggle it ON
-21. You'll need a Twilio account for SMS (see Step 4)
+21. Follow Supabase's guide to configure an SMS provider for OTP
 
 **Create Storage Buckets (for photos/videos):**
 
@@ -142,27 +142,7 @@ catches errors, and has tools that make coding easier.
 
 ---
 
-## Step 4: Set Up Twilio (for SMS/OTP)
-
-**What is Twilio?**
-A service that sends SMS messages. You need it so users can verify their
-phone numbers with a one-time code.
-
-1. Go to [twilio.com](https://www.twilio.com) and sign up
-2. You get free trial credits (~$15)
-3. Get a phone number (Twilio gives you one)
-4. Find your:
-   - **Account SID** (in the dashboard)
-   - **Auth Token** (in the dashboard)
-5. In your Supabase dashboard:
-   - Go to Authentication → Providers → Phone
-   - Enter your Twilio Account SID, Auth Token, and phone number
-
-**Cost:** About R0.08 per SMS. For testing, the free tier is enough.
-
----
-
-## Step 5: Get a Google Maps API Key
+## Step 4: Get a Google Maps API Key
 
 **Why?**
 The map in your app needs permission from Google to show.
@@ -181,7 +161,7 @@ More than enough for development and early launch.
 
 ---
 
-## Step 6: Set Up the Flutter Project
+## Step 5: Set Up the Flutter Project
 
 Now let's connect everything:
 
@@ -218,7 +198,7 @@ Open `android/app/src/main/AndroidManifest.xml` and add inside `<application>`:
 
 ---
 
-## Step 7: Run the App!
+## Step 6: Run the App!
 
 ```bash
 # Connect your Android phone via USB
@@ -240,7 +220,7 @@ to manually create test accounts.
 
 ---
 
-## Step 8: What to Build Next
+## Step 7: What to Build Next
 
 Now that everything is set up, here's the order to build features:
 
@@ -287,7 +267,6 @@ Now that everything is set up, here's the order to build features:
 - [ ] Profile photo upload (camera/gallery → Supabase Storage)
 - [ ] Voice/video intro recording and playback
 - [ ] Push notifications via Firebase Cloud Messaging
-- [ ] SMS alerts via Twilio for emergency contacts during jobs
 - [ ] Automated payout processing (currently manual via Yoco dashboard)
 - [ ] App icon and splash screen
 - [ ] Testing on real Android device
@@ -346,7 +325,6 @@ Run `flutter doctor -v` for detailed info. It usually needs:
 |---------|-----------|-----------------|
 | Supabase | 50,000 MAU, 500MB storage | R350/month |
 | Google Maps | $200/month credit (28K loads) | Pay per load |
-| Twilio SMS | ~$15 trial credit | R0.08 per SMS |
 | Firebase (notifications) | Free for push | Free |
 | Google Play Store | Once-off R400 | - |
 | Apple App Store | R1,600/year | R1,600/year |

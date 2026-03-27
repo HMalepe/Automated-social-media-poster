@@ -3,7 +3,7 @@
 // ============================================
 //
 // WHAT IS THIS?
-// A WhatsApp-style chat screen between a client and a pro.
+// A real-time chat screen between a client and a pro.
 // Messages appear in real-time (no refresh needed).
 //
 // DESIGN:
@@ -164,23 +164,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Text(widget.otherPersonName),
           ],
         ),
-        actions: [
-          // WhatsApp transition button
-          IconButton(
-            icon: const Icon(Icons.open_in_new),
-            tooltip: 'Continue on WhatsApp',
-            onPressed: () {
-              // TODO: Open WhatsApp deep link
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'Both parties must agree to move to WhatsApp',
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+        actions: const [],
       ),
 
       body: Column(

@@ -64,7 +64,6 @@ CREATE TABLE profiles (
   address TEXT,                                     -- For clients: their home address
   latitude DECIMAL(10, 8),                          -- GPS latitude of home address
   longitude DECIMAL(11, 8),                         -- GPS longitude of home address
-  emergency_contact_phone VARCHAR(15),              -- Who to alert during a job
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -216,10 +215,6 @@ CREATE TABLE bookings (
 
   -- Notes
   client_notes TEXT,                                -- Special requests
-
-  -- Safety features
-  emergency_contact_notified BOOLEAN DEFAULT FALSE,
-  tracking_link_sent BOOLEAN DEFAULT FALSE,
 
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

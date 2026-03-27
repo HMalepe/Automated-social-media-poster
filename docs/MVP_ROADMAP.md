@@ -48,7 +48,6 @@ We are building ONLY the following features for launch. Everything else waits.
 - **Backend:** Supabase (PostgreSQL + Auth + Realtime + Storage + Edge Functions)
 - **Maps:** Google Maps Flutter plugin
 - **Payments:** Yoco API (South Africa focused)
-- **SMS:** Twilio (for OTP and critical alerts)
 - **Push Notifications:** Firebase Cloud Messaging (free)
 
 ---
@@ -80,8 +79,3 @@ We are building ONLY the following features for launch. Everything else waits.
 - Takes 2.95% per transaction
 - You hold money in escrow until job is done
 
-### Twilio (The SMS)
-- Sends text messages for OTP verification
-- Sends emergency contact alerts
-- Backup for push notifications
-- Costs about R0.08 per SMS

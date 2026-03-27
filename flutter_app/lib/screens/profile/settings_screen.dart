@@ -257,27 +257,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _updateBio,
                   ),
                 ),
-                ListTile(
-                  leading: const Icon(Icons.contact_phone),
-                  title: const Text('Emergency Contact'),
-                  subtitle: Text(
-                      _profile?['emergency_contact_phone'] ?? 'Not set'),
-                  trailing: const Icon(Icons.edit, size: 20),
-                  onTap: () => _showEditDialog(
-                    'Emergency Contact',
-                    _profile?['emergency_contact_phone'] ?? '',
-                    (value) async {
-                      final userId = _supabase.auth.currentUser?.id;
-                      if (userId == null) return;
-                      await _supabase.from('profiles').update(
-                          {'emergency_contact_phone': value}).eq(
-                          'user_id', userId);
-                      setState(
-                          () => _profile?['emergency_contact_phone'] = value);
-                    },
-                  ),
-                ),
-
                 // Pro Settings (only if user is a pro)
                 if (_proProfile != null) ...[
                   const Divider(),

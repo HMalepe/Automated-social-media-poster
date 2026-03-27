@@ -63,8 +63,6 @@ class ProfileModel {
   final String? address;
   final double? latitude;
   final double? longitude;
-  final String? emergencyContactPhone;
-
   ProfileModel({
     required this.userId,
     required this.displayName,
@@ -75,7 +73,6 @@ class ProfileModel {
     this.address,
     this.latitude,
     this.longitude,
-    this.emergencyContactPhone,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -93,7 +90,6 @@ class ProfileModel {
       longitude: json['longitude'] != null
           ? double.parse(json['longitude'].toString())
           : null,
-      emergencyContactPhone: json['emergency_contact_phone'],
     );
   }
 
@@ -108,7 +104,6 @@ class ProfileModel {
       'address': address,
       'latitude': latitude,
       'longitude': longitude,
-      'emergency_contact_phone': emergencyContactPhone,
     };
   }
 }
