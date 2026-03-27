@@ -160,6 +160,12 @@ class MapProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Replace all active filters with the given list (used by search).
+  void setFilters(List<String> categories) {
+    _activeFilters = Set<String>.from(categories);
+    notifyListeners();
+  }
+
   // ============================================
   // REAL-TIME LOCATION UPDATES
   // ============================================

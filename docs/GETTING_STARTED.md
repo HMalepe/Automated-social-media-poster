@@ -244,31 +244,54 @@ to manually create test accounts.
 
 Now that everything is set up, here's the order to build features:
 
-### Week 1-2: Authentication (Login flow)
-- ✅ Phone number input screen (already created)
-- ✅ OTP verification screen (already created)
-- ✅ Profile setup screen (already created)
-- [ ] Profile photo upload
-- [ ] Pro service setup (pick categories, set prices)
+### Authentication (Login flow) - DONE
+- ✅ Phone number input screen
+- ✅ OTP verification screen
+- ✅ Profile setup screen (client/pro/both selection)
+- ✅ Auth Edge Function (Supabase + Twilio OTP)
+- [ ] Profile photo upload (add camera/gallery picker)
+- [ ] Pro service setup wizard (pick categories, set prices)
 
-### Week 3-4: The Map
-- [ ] Show Google Map on main screen
-- [ ] Load available pros as pins
-- [ ] Color-code pins by category
-- [ ] Tap pin to see pro preview card
-- [ ] Pro availability toggle (go live / go offline)
+### The Map - DONE
+- ✅ Google Maps with real-time pro pins
+- ✅ Color-coded pins by service category
+- ✅ Category filter chips
+- ✅ Tap pin to see pro preview card
+- ✅ Pro availability toggle (Go Live / Go Offline)
+- ✅ GPS location tracking every 30 seconds
+- ✅ Real-time Supabase subscription for pin updates
+- ✅ Search bar filtering by category
 
-### Week 5-6: Booking
-- [ ] "Book Now" flow (select service → confirm → pay)
-- [ ] "Schedule" flow (pick date/time)
-- [ ] Booking notifications
-- [ ] Job start/complete flow
+### Booking - DONE
+- ✅ "Book Now" instant booking flow (4-step stepper)
+- ✅ "Schedule Booking" advance booking flow
+- ✅ In-app notifications screen
+- ✅ Job lifecycle (pending → accepted → in_progress → completed)
+- ✅ Active booking screen with real-time status updates
+- ✅ In-app chat (text messaging, real-time)
 
-### Week 7-8: Trust & Payment
-- [ ] Vouch prompt after job completion
-- [ ] Trust badges on profiles
-- [ ] Yoco payment integration
-- [ ] "My Pros" favorites
+### Trust & Payment - DONE
+- ✅ Vouch system (post-job prompt with optional comment)
+- ✅ Trust badges (New Pro → Trusted → Certified, auto-upgraded)
+- ✅ Yoco payment integration (checkout, verification, webhooks)
+- ✅ Escrow flow (authorize → capture → payout)
+- ✅ Pro earnings dashboard with payout requests
+- ✅ "My Pros" favorites screen
+
+### Profile & Settings - DONE
+- ✅ User profile/settings screen (edit name, bio, emergency contact)
+- ✅ Pro settings (hourly rate, service radius slider, bank details)
+- ✅ Logout flow
+
+### Still Needed (Your Next Steps)
+- [ ] Profile photo upload (camera/gallery → Supabase Storage)
+- [ ] Voice/video intro recording and playback
+- [ ] Push notifications via Firebase Cloud Messaging
+- [ ] SMS alerts via Twilio for emergency contacts during jobs
+- [ ] Automated payout processing (currently manual via Yoco dashboard)
+- [ ] App icon and splash screen
+- [ ] Testing on real Android device
+- [ ] Google Play Store submission
 
 ---
 

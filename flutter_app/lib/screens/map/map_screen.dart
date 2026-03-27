@@ -38,8 +38,11 @@ import '../../widgets/pro_preview_card.dart';
 import '../booking/booking_flow_screen.dart';
 import '../booking/bookings_list_screen.dart';
 import '../chat/conversations_screen.dart';
+import '../notifications/notifications_screen.dart';
 import '../payment/pro_earnings_screen.dart';
 import '../profile/pro_profile_screen.dart';
+import '../profile/settings_screen.dart';
+import '../favorites/my_pros_screen.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -99,7 +102,9 @@ class _MapScreenState extends State<MapScreen> {
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
             onPressed: () {
-              // TODO: Navigate to notifications screen
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+              );
             },
           ),
           // Earnings button (only for pros)
@@ -118,7 +123,9 @@ class _MapScreenState extends State<MapScreen> {
           IconButton(
             icon: const Icon(Icons.person_outline),
             onPressed: () {
-              // TODO: Navigate to user's own profile/settings
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
             },
           ),
         ],
@@ -354,12 +361,29 @@ class _MapScreenState extends State<MapScreen> {
                 ),
               ],
             ),
-            child: const TextField(
-              decoration: InputDecoration(
+            child: TextField(
+              decoration: const InputDecoration(
                 hintText: 'Search for a service...',
                 border: InputBorder.none,
                 icon: Icon(Icons.search),
               ),
+              onChanged: (query) {
+                // Filter map pins by search query matching category labels
+                if (query.trim().isEmpty) {
+                  mapProvider.clearFilters();
+                  return;
+                }
+                final q = query.toLowerCase();
+                final matchingCategories = AppConstants.serviceCategories.entries
+                    .where((e) =>
+                        (e.value['label'] as String).toLowerCase().contains(q) ||
+                        e.key.toLowerCase().contains(q))
+                    .map((e) => e.key)
+                    .toList();
+                if (matchingCategories.isNotEmpty) {
+                  mapProvider.setFilters(matchingCategories);
+                }
+              },
             ),
           ),
         ),
@@ -627,23 +651,8 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   /// My Pros tab — shows favorited pros.
-  /// TODO: Build a dedicated favorites screen. For now, placeholder.
   Widget _buildMyProsPlaceholder() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.favorite, size: 64, color: Colors.grey),
-          SizedBox(height: 16),
-          Text('My Pros', style: TextStyle(fontSize: 18)),
-          SizedBox(height: 8),
-          Text(
-            'Your favorite service providers will appear here.',
-            style: TextStyle(color: Colors.grey),
-          ),
-        ],
-      ),
-    );
+    return const MyProsScreen();
   }
 
   /// Chat tab — shows all active conversations.
