@@ -1,0 +1,96 @@
+# ============================================
+# VouchSA Flutter App - Package Configuration
+# ============================================
+#
+# WHAT IS THIS FILE?
+# Think of it as a shopping list for your app. It tells Flutter:
+# 1. What your app is called
+# 2. What version it is
+# 3. What "packages" (pre-built tools) your app needs
+#
+# WHAT IS A PACKAGE?
+# Someone else already wrote code for things like Google Maps,
+# camera access, notifications, etc. Instead of writing it from
+# scratch, we just add their package here and use it. Like using
+# a recipe instead of inventing cooking from scratch.
+#
+# HOW TO INSTALL PACKAGES:
+# After editing this file, run: flutter pub get
+# This downloads all the packages listed below.
+# ============================================
+
+name: vouchsa
+description: VouchSA - Trust-based marketplace for South African suburbs
+
+# Minimum Dart version required
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+# ============================================
+# DEPENDENCIES (packages your app uses)
+# ============================================
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # --- UI & Design ---
+  cupertino_icons: ^1.0.6          # iOS-style icons
+  google_fonts: ^6.1.0             # Beautiful fonts (like the ones on Google Docs)
+  flutter_svg: ^2.0.9              # Display SVG images (scalable icons/logos)
+
+  # --- Supabase (Your Backend) ---
+  supabase_flutter: ^2.3.0         # Connects your app to Supabase (database, auth, etc.)
+
+  # --- Maps & Location ---
+  google_maps_flutter: ^2.5.3      # The interactive map widget
+  geolocator: ^11.0.0              # Gets the user's GPS location
+  geocoding: ^3.0.0                # Converts addresses to GPS coordinates and vice versa
+
+  # --- Media (Photos, Video, Audio) ---
+  image_picker: ^1.0.7             # Pick photos from gallery or camera
+  cached_network_image: ^3.3.1     # Load and cache images from the internet (pro photos)
+  video_player: ^2.8.2             # Play 30-second intro videos
+
+  # --- State Management ---
+  # (How the app keeps track of what's happening — like "is the user logged in?")
+  provider: ^6.1.1                 # Simple state management (recommended for beginners)
+
+  # --- Navigation ---
+  go_router: ^13.0.0               # Handles moving between screens (like clicking links on a website)
+
+  # --- Notifications ---
+  firebase_core: ^2.25.4           # Firebase base (needed for push notifications)
+  firebase_messaging: ^14.7.15     # Push notifications (free from Google)
+  flutter_local_notifications: ^17.0.0  # Show notifications when app is open
+
+  # --- Utilities ---
+  intl: ^0.19.0                    # Format dates, times, and currency (R150.00)
+  url_launcher: ^6.2.3             # Open links, phone dialer, WhatsApp
+  shared_preferences: ^2.2.2       # Store small data locally (like "remember me")
+  flutter_secure_storage: ^9.0.0   # Store sensitive data securely (auth tokens)
+  uuid: ^4.2.2                     # Generate unique IDs
+
+  # --- Payment ---
+  # Note: Yoco doesn't have an official Flutter package.
+  # We'll use their web checkout via webview or HTTP calls.
+  http: ^1.2.0                     # Make HTTP requests (talk to APIs)
+  webview_flutter: ^4.5.0          # Show web pages inside the app (for payment checkout)
+
+# ============================================
+# DEV DEPENDENCIES (only used during development)
+# ============================================
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1            # Code quality checks (catches common mistakes)
+
+# ============================================
+# FLUTTER-SPECIFIC SETTINGS
+# ============================================
+flutter:
+  uses-material-design: true       # Use Google's Material Design components
+
+  # Assets: images, icons, etc. that ship with the app
+  assets:
+    - assets/images/
+    - assets/icons/
