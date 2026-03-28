@@ -20,6 +20,7 @@
 // ============================================
 
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 import '../../services/pro_service.dart';
 import '../../utils/constants.dart';
@@ -113,7 +114,11 @@ class _ProProfileScreenState extends State<ProProfileScreen> {
           IconButton(
             icon: const Icon(Icons.share_outlined),
             onPressed: () {
-              // TODO: Share pro profile link
+              Share.share(
+                'Check out ${widget.proName} on VouchSA! '
+                'https://vouchsa.co.za/pro/${widget.proId}',
+                subject: '${widget.proName} on VouchSA',
+              );
             },
           ),
         ],

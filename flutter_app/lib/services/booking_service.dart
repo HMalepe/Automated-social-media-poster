@@ -180,8 +180,6 @@ class BookingService {
           .eq('id', bookingId)
           .eq('pro_id', _supabase.auth.currentUser!.id);
 
-      // TODO: Capture payment from escrow
-
       return true;
     } catch (e) {
       return false;
@@ -228,7 +226,9 @@ class BookingService {
           })
           .eq('booking_id', bookingId);
 
-      // TODO: Release payment from escrow to pro
+      // Payment capture and pro payout are handled automatically
+      // by the bookings Edge Function when status changes to 'completed'.
+      // It calls the payments Edge Function's capture_and_payout action.
 
       return true;
     } catch (e) {

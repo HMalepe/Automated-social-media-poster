@@ -29,6 +29,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../models/booking_model.dart';
 import '../../services/booking_service.dart';
 import '../../utils/constants.dart';
+import '../chat/chat_screen.dart';
 import 'vouch_screen.dart';
 
 class ActiveBookingScreen extends StatefulWidget {
@@ -368,9 +369,7 @@ class _ActiveBookingScreenState extends State<ActiveBookingScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  // TODO: Navigate to chat
-                },
+                onPressed: () => _openChat(),
                 icon: const Icon(Icons.chat),
                 label: const Text('Chat with Pro'),
                 style: ElevatedButton.styleFrom(
@@ -405,9 +404,7 @@ class _ActiveBookingScreenState extends State<ActiveBookingScreen> {
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
-                onPressed: () {
-                  // TODO: Report issue
-                },
+                onPressed: () => _reportIssue(),
                 icon: const Icon(Icons.flag_outlined),
                 label: const Text('Report Issue'),
                 style: OutlinedButton.styleFrom(
@@ -531,6 +528,144 @@ class _ActiveBookingScreenState extends State<ActiveBookingScreen> {
     await _bookingService.completeJob(widget.bookingId);
     setState(() => _isActionLoading = false);
     await _loadBooking();
+  }
+
+  Future<void> _openChat() async {
+    try {
+      // Find or create the conversation for this booking
+      final existing = await _supabase
+          .from('conversations')
+          .select()
+          .eq('booking_id', widget.bookingId)
+          .maybeSingle();
+
+      String conversationId;
+      if (existing != null) {
+        conversationId = existing['id'];
+      } else {
+        // Create conversation
+        final result = await _supabase.from('conversations').insert({
+          'booking_id': widget.bookingId,
+          'client_id': _booking!.clientId,
+          'pro_id': _booking!.proId,
+        }).select().single();
+        conversationId = result['id'];
+      }
+
+      // Get the other person's name
+      final otherUserId = widget.isPro ? _booking!.clientId : _booking!.proId;
+      final profile = await _supabase
+          .from('profiles')
+          .select('display_name, profile_photo_url')
+          .eq('user_id', otherUserId)
+          .single();
+
+      if (mounted) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ChatScreen(
+              conversationId: conversationId,
+              otherPersonName: profile['display_name'] ?? 'User',
+              otherPersonPhoto: profile['profile_photo_url'],
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not open chat: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _reportIssue() async {
+    final controller = TextEditingController();
+    String reportType = 'general';
+
+    final result = await showDialog<Map<String, String>>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: const Text('Report an Issue'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<String>(
+                value: reportType,
+                decoration: const InputDecoration(labelText: 'Issue Type'),
+                items: const [
+                  DropdownMenuItem(value: 'general', child: Text('General Issue')),
+                  DropdownMenuItem(value: 'no_show', child: Text('Pro Did Not Show Up')),
+                  DropdownMenuItem(value: 'quality', child: Text('Poor Quality Work')),
+                  DropdownMenuItem(value: 'safety', child: Text('Safety Concern')),
+                  DropdownMenuItem(value: 'overcharge', child: Text('Overcharged')),
+                ],
+                onChanged: (val) => setDialogState(() => reportType = val!),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: controller,
+                maxLines: 4,
+                maxLength: 500,
+                decoration: const InputDecoration(
+                  labelText: 'Describe the issue',
+                  hintText: 'Tell us what happened...',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (controller.text.trim().isEmpty) return;
+                Navigator.pop(ctx, {
+                  'type': reportType,
+                  'description': controller.text.trim(),
+                });
+              },
+              child: const Text('Submit', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (result == null) return;
+
+    try {
+      await _supabase.from('reports').insert({
+        'reporter_id': _supabase.auth.currentUser!.id,
+        'reported_user_id': _booking!.proId,
+        'booking_id': widget.bookingId,
+        'report_type': result['type'],
+        'description': result['description'],
+      });
+
+      // Update booking to disputed
+      await _supabase
+          .from('bookings')
+          .update({'status': 'disputed'})
+          .eq('id', widget.bookingId);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Report submitted. Our team will review it.')),
+        );
+        await _loadBooking();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to submit report: $e')),
+        );
+      }
+    }
   }
 
   String _formatDuration(Duration d) {
