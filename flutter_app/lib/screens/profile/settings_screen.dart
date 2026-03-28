@@ -6,6 +6,7 @@ import '../../providers/auth_provider.dart';
 import '../../services/photo_service.dart';
 import '../../utils/constants.dart';
 import '../auth/login_screen.dart';
+import '../pro_setup/manage_services_screen.dart';
 
 /// User profile and app settings screen.
 /// Shows personal info, pro settings (if applicable), and app preferences.
@@ -359,6 +360,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             _updateServiceRadius(value.round()),
                       ),
                     ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.build),
+                    title: const Text('My Services'),
+                    subtitle: const Text('Add, edit, or remove services'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => const ManageServicesScreen()),
+                      );
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.account_balance),

@@ -13,6 +13,7 @@ import '../../providers/auth_provider.dart';
 import '../../services/photo_service.dart';
 import '../../utils/constants.dart';
 import '../map/map_screen.dart';
+import '../pro_setup/pro_setup_wizard.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
   const ProfileSetupScreen({super.key});
@@ -192,11 +193,21 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                           }
 
                           if (success && context.mounted) {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (_) => const MapScreen(),
-                              ),
-                            );
+                            // Pros go to service setup wizard first
+                            if (_selectedUserType == 'pro' ||
+                                _selectedUserType == 'both') {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (_) => const ProSetupWizard(),
+                                ),
+                              );
+                            } else {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (_) => const MapScreen(),
+                                ),
+                              );
+                            }
                           }
                         },
                   style: ElevatedButton.styleFrom(

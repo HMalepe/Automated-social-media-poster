@@ -20,6 +20,7 @@
 // ============================================
 
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import '../../services/pro_service.dart';
 import '../../utils/constants.dart';
 import '../../widgets/trust_badge.dart';
@@ -76,6 +77,19 @@ class _ProProfileScreenState extends State<ProProfileScreen> {
         _errorMessage = 'Could not load profile. Please try again.';
       }
     });
+  }
+
+  /// Plays a video or audio intro in a bottom sheet dialog.
+  void _playIntro(BuildContext context, String url, bool isVideo) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.black,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => _IntroPlayerSheet(url: url, isVideo: isVideo),
+    );
   }
 
   @override
@@ -389,7 +403,11 @@ class _ProProfileScreenState extends State<ProProfileScreen> {
                   ),
                   subtitle: const Text('Tap to play'),
                   onTap: () {
-                    // TODO: Play video/audio
+                    final url =
+                        profile.videoIntroUrl ?? profile.voiceIntroUrl;
+                    if (url != null) {
+                      _playIntro(context, url, profile.videoIntroUrl != null);
+                    }
                   },
                 ),
               ),
@@ -734,6 +752,150 @@ class _SectionHeader extends StatelessWidget {
         style: const TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+/// Bottom sheet that plays a video or audio intro.
+class _IntroPlayerSheet extends StatefulWidget {
+  final String url;
+  final bool isVideo;
+
+  const _IntroPlayerSheet({required this.url, required this.isVideo});
+
+  @override
+  State<_IntroPlayerSheet> createState() => _IntroPlayerSheetState();
+}
+
+class _IntroPlayerSheetState extends State<_IntroPlayerSheet> {
+  late VideoPlayerController _controller;
+  bool _initialized = false;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
+      ..initialize().then((_) {
+        setState(() => _initialized = true);
+        _controller.play();
+      }).catchError((_) {
+        setState(() => _hasError = true);
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        height: widget.isVideo ? 350 : 200,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            // Handle bar
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[600],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            if (_hasError)
+              const Center(
+                child: Text(
+                  'Could not load intro',
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            else if (!_initialized)
+              const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              )
+            else ...[
+              // Video display or audio visualization
+              if (widget.isVideo)
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
+                    ),
+                  ),
+                )
+              else
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _controller.value.isPlaying
+                              ? Icons.graphic_eq
+                              : Icons.mic,
+                          size: 48,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _controller.value.isPlaying
+                              ? 'Playing voice intro...'
+                              : 'Voice intro',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+              // Playback controls
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      _controller.value.isPlaying
+                          ? Icons.pause_circle
+                          : Icons.play_circle,
+                      size: 48,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        if (_controller.value.isPlaying) {
+                          _controller.pause();
+                        } else {
+                          _controller.play();
+                        }
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.replay,
+                        size: 32, color: Colors.white70),
+                    onPressed: () {
+                      _controller.seekTo(Duration.zero);
+                      _controller.play();
+                      setState(() {});
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ],
         ),
       ),
     );
