@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "Spaza POS",
+    "slug": "spaza-pos",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1B4332"
+    },
+    "scheme": "spaza-pos",
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1B4332"
+      },
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "package": "com.spazapos.app"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.spazapos.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Spaza POS needs camera access to scan product barcodes."
+      }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Spaza POS needs camera access to scan product barcodes."
+        }
+      ],
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
