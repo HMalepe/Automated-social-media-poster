@@ -136,6 +136,69 @@
     30% { transform: rotate(90deg); }
   }
 
+  /* ---------- SCENE: SHOWER ---------- */
+  .scene-shower #rUpperArm { animation: scrubArmR 0.9s ease-in-out infinite; }
+  .scene-shower #rLowerArm { animation: scrubForearmR 0.9s ease-in-out infinite; }
+  .scene-shower #lUpperArm { transform: rotate(-20deg); }
+  .scene-shower #lLowerArm { transform: rotate(-10deg); }
+  .scene-shower #lUpperLeg { transform: rotate(-6deg); }
+  .scene-shower #rUpperLeg { transform: rotate(6deg); }
+  @keyframes scrubArmR {
+    0%, 100% { transform: rotate(40deg); }
+    50% { transform: rotate(70deg); }
+  }
+  @keyframes scrubForearmR {
+    0%, 100% { transform: rotate(-60deg); }
+    50% { transform: rotate(-90deg); }
+  }
+  .scene-shower .drop {
+    opacity: 0;
+    stroke: #4fa8d8;
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+  .scene-shower .drop { animation: fall 0.8s linear infinite; }
+  .scene-shower .drop:nth-child(2) { animation-delay: 0.2s; }
+  .scene-shower .drop:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes fall {
+    0% { transform: translateY(0); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translateY(40px); opacity: 0; }
+  }
+
+  /* ---------- SCENE: BRUSH TEETH ---------- */
+  .scene-brush #rUpperArm { transform: rotate(110deg); }
+  .scene-brush #rLowerArm { animation: brushForearm 0.4s ease-in-out infinite; }
+  .scene-brush #lUpperArm { transform: rotate(-15deg); }
+  .scene-brush #headGroup { animation: brushHead 0.4s ease-in-out infinite; }
+  @keyframes brushForearm {
+    0%, 100% { transform: rotate(-95deg); }
+    50% { transform: rotate(-75deg); }
+  }
+  @keyframes brushHead {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(2px); }
+  }
+
+  /* ---------- SCENE: DRIVE ---------- */
+  .scene-drive #torsoGroup { transform: translateY(40px); transform-origin: 100px 150px; }
+  .scene-drive #lUpperLeg { transform: rotate(-75deg); }
+  .scene-drive #rUpperLeg { transform: rotate(75deg); }
+  .scene-drive #lLowerLeg { transform: rotate(70deg); }
+  .scene-drive #rLowerLeg { transform: rotate(-70deg); }
+  .scene-drive #rUpperArm { transform: rotate(75deg); }
+  .scene-drive #lUpperArm { transform: rotate(-75deg); }
+  .scene-drive #rLowerArm { animation: steerR 1.6s ease-in-out infinite; }
+  .scene-drive #lLowerArm { animation: steerL 1.6s ease-in-out infinite; }
+  @keyframes steerR {
+    0%, 100% { transform: rotate(20deg); }
+    50% { transform: rotate(-10deg); }
+  }
+  @keyframes steerL {
+    0%, 100% { transform: rotate(-20deg); }
+    50% { transform: rotate(10deg); }
+  }
+
   /* ---------- SCENE: SLEEP ---------- */
   .scene-sleep #stickman {
     transform: rotate(90deg) translate(0, 0);
@@ -162,7 +225,9 @@
   <svg viewBox="0 0 200 260">
     <g id="stickman">
       <g id="torsoGroup">
-        <circle class="head" cx="100" cy="60" r="18"/>
+        <g id="headGroup">
+          <circle class="head" cx="100" cy="60" r="18"/>
+        </g>
         <line class="torso" x1="100" y1="78" x2="100" y2="150"/>
 
         <g id="rUpperArm">
@@ -196,6 +261,10 @@
     </g>
 
     <text id="zzz" x="125" y="60">Z z z</text>
+
+    <line class="drop" x1="60" y1="20" x2="60" y2="30"/>
+    <line class="drop" x1="75" y1="15" x2="75" y2="25"/>
+    <line class="drop" x1="130" y1="18" x2="130" y2="28"/>
   </svg>
 </div>
 
@@ -203,7 +272,10 @@
 
 <div id="controls">
   <button data-scene="wake">Wake Up</button>
+  <button data-scene="shower">Shower</button>
+  <button data-scene="brush">Brush Teeth</button>
   <button data-scene="walk">Walk</button>
+  <button data-scene="drive">Drive</button>
   <button data-scene="desk">Desk</button>
   <button data-scene="eat">Eat</button>
   <button data-scene="sleep">Sleep</button>
@@ -212,10 +284,13 @@
 <script>
   const stage = document.getElementById('stage');
   const label = document.getElementById('label');
-  const scenes = ['wake', 'walk', 'desk', 'eat', 'sleep'];
+  const scenes = ['wake', 'shower', 'brush', 'walk', 'drive', 'desk', 'eat', 'sleep'];
   const labels = {
     wake: 'Waking up & stretching',
+    shower: 'Taking a shower',
+    brush: 'Brushing teeth',
     walk: 'Walking',
+    drive: 'Driving',
     desk: 'Working at desk',
     eat: 'Eating',
     sleep: 'Sleeping'
