@@ -127,6 +127,33 @@
   }
   button:hover { background: #34343f; transform: translateY(-1px); }
   button.active { background: linear-gradient(135deg,#ff9f43,#ffd66b); color: #1c1c22; }
+  #manualBtn.active { background: linear-gradient(135deg,#7be0a8,#3ec97c); color: #122; }
+
+  /* every joint pivots cleanly so sliders can drive it directly */
+  #torsoGroup { transform-origin: 110px 165px; transform: rotate(0deg); transition: transform 0.3s ease; }
+  #headGroup { transform-origin: 110px 52px; transition: transform 0.3s ease; }
+  .pose-manual #torsoGroup,
+  .pose-manual #headGroup,
+  .pose-manual .limbGroup { animation: none !important; }
+
+  /* ---------------- MANUAL JOINT PANEL ---------------- */
+  #manualPanel {
+    margin-top: 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px 18px;
+    width: 800px;
+    max-width: 92vw;
+  }
+  #sliderGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px 18px;
+  }
+  .sliderItem { display: flex; flex-direction: column; gap: 4px; }
+  .sliderItem label { color: #cfcfd6; font-size: 12px; font-weight: 600; letter-spacing: 0.3px; }
+  .sliderItem input[type="range"] { width: 100%; accent-color: #ff9f43; }
 
   /* =================== SCENE-SPECIFIC POSES =================== */
   .pose-wake #rUpperArm { animation: stretchArmR 2.2s ease-in-out infinite; }
@@ -444,6 +471,10 @@
 
 <div id="controls"></div>
 
+<div id="manualPanel" style="display:none;">
+  <div id="sliderGrid"></div>
+</div>
+
 <script>
   const scenes = ['wake', 'shower', 'brush', 'walk', 'drive', 'desk', 'eat', 'sleep'];
   const labels = {
@@ -466,9 +497,80 @@
     const btn = document.createElement('button');
     btn.textContent = labels[s].split(' ')[0] === 'Waking' ? 'Wake Up' : labels[s];
     btn.dataset.scene = s;
-    btn.addEventListener('click', () => { setScene(s); resetAutoplay(); });
+    btn.addEventListener('click', () => { exitManualMode(); setScene(s); resetAutoplay(); });
     controls.appendChild(btn);
   });
+
+  const manualBtn = document.createElement('button');
+  manualBtn.id = 'manualBtn';
+  manualBtn.textContent = 'Manual Joint Control';
+  manualBtn.addEventListener('click', toggleManualMode);
+  controls.appendChild(manualBtn);
+
+  /* Each joint is independent: every entry drives exactly one element's
+     rotation, with no shared pivot or coupling to any other joint. */
+  const joints = [
+    { id: 'headGroup',  label: 'Head' },
+    { id: 'torsoGroup', label: 'Torso' },
+    { id: 'lUpperArm',  label: 'L Shoulder' },
+    { id: 'lLowerArm',  label: 'L Elbow' },
+    { id: 'rUpperArm',  label: 'R Shoulder' },
+    { id: 'rLowerArm',  label: 'R Elbow' },
+    { id: 'lUpperLeg',  label: 'L Hip' },
+    { id: 'lLowerLeg',  label: 'L Knee' },
+    { id: 'rUpperLeg',  label: 'R Hip' },
+    { id: 'rLowerLeg',  label: 'R Knee' }
+  ];
+
+  const sliderGrid = document.getElementById('sliderGrid');
+  const manualPanel = document.getElementById('manualPanel');
+
+  joints.forEach(j => {
+    const wrap = document.createElement('div');
+    wrap.className = 'sliderItem';
+    const label = document.createElement('label');
+    label.textContent = j.label + ': 0°';
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.min = -180;
+    input.max = 180;
+    input.value = 0;
+    input.addEventListener('input', () => {
+      label.textContent = j.label + ': ' + input.value + '°';
+      document.getElementById(j.id).style.transform = `rotate(${input.value}deg)`;
+    });
+    wrap.appendChild(label);
+    wrap.appendChild(input);
+    sliderGrid.appendChild(wrap);
+    j.input = input;
+    j.labelEl = label;
+  });
+
+  let manualMode = false;
+  function toggleManualMode() {
+    manualMode = !manualMode;
+    manualPanel.style.display = manualMode ? 'block' : 'none';
+    if (manualMode) {
+      clearInterval(timer);
+      lowerThird.classList.remove('show');
+      document.querySelectorAll('#controls button').forEach(b => { if (b !== manualBtn) b.classList.remove('active'); });
+      character.className = 'pose-manual';
+      joints.forEach(j => {
+        j.input.value = 0;
+        j.labelEl.textContent = j.label + ': 0°';
+        document.getElementById(j.id).style.transform = '';
+      });
+    }
+    manualBtn.classList.toggle('active', manualMode);
+  }
+
+  function exitManualMode() {
+    if (!manualMode) return;
+    manualMode = false;
+    manualBtn.classList.remove('active');
+    manualPanel.style.display = 'none';
+    joints.forEach(j => { document.getElementById(j.id).style.transform = ''; });
+  }
 
   let i = 0;
   function setScene(name) {
