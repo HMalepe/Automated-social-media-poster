@@ -53,22 +53,23 @@
   }
   #character svg { width: 100%; height: 100%; }
 
-  .limb { stroke-linecap: round; fill: none; }
-  .armSkin { stroke: #e6a868; stroke-width: 16; }
-  .legPant { stroke: #2d3046; stroke-width: 18; }
-  .torsoShirt { stroke: #3a9bc7; stroke-width: 30; stroke-linecap: round; }
+  .armSkin { fill: #e6a868; }
+  .legPant { fill: #2d3046; }
+  .torsoShirt { fill: #3a9bc7; }
+  .shoe { fill: #1a1c28; }
+  .hand { fill: #e6a868; }
   .headFill { fill: url(#skinGrad); }
   .faceFeature { stroke: #2b2b2b; stroke-width: 2.5; stroke-linecap: round; fill: none; }
   .hair { fill: #2b1b12; }
 
-  #rUpperArm, #lUpperArm { transform-origin: 110px 92px; }
-  #rUpperLeg, #lUpperLeg { transform-origin: 110px 165px; }
-  #rLowerArm { transform-origin: 110px 138px; }
-  #lLowerArm { transform-origin: 110px 138px; }
-  #rLowerLeg { transform-origin: 110px 225px; }
-  #lLowerLeg { transform-origin: 110px 225px; }
-  #rUpperArm, #lUpperArm, #rUpperLeg, #lUpperLeg,
-  #rLowerArm, #lLowerArm, #rLowerLeg, #lLowerLeg { transform: rotate(0deg); transition: transform 0.5s ease; }
+  /* Each limb group is pre-positioned at its joint via an SVG translate() attribute
+     on its wrapping <g>, so CSS rotation with transform-origin 0 0 pivots exactly
+     at that joint with no manual pixel matching. */
+  .limbGroup {
+    transform-origin: 0px 0px;
+    transform: rotate(0deg);
+    transition: transform 0.5s ease;
+  }
 
   /* ---------------- LOWER THIRD CAPTION ---------------- */
   #lowerThird {
@@ -146,11 +147,11 @@
   .drop:nth-child(3) { animation-delay: .5s; }
   @keyframes fall { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(46px); opacity: 0; } }
 
-  .pose-brush #rUpperArm { transform: rotate(112deg); }
+  .pose-brush #rUpperArm { transform: rotate(35deg); }
   .pose-brush #rLowerArm { animation: brushForearm 0.4s ease-in-out infinite; }
   .pose-brush #lUpperArm { transform: rotate(-15deg); }
   .pose-brush #headGroup { animation: brushHead 0.4s ease-in-out infinite; }
-  @keyframes brushForearm { 0%,100% { transform: rotate(-95deg); } 50% { transform: rotate(-78deg); } }
+  @keyframes brushForearm { 0%,100% { transform: rotate(-150deg); } 50% { transform: rotate(-130deg); } }
   @keyframes brushHead { 0%,100% { transform: translateX(0); } 50% { transform: translateX(2px); } }
 
   .pose-walk #rUpperLeg { animation: walkLegR 0.8s ease-in-out infinite; }
@@ -165,38 +166,38 @@
   @keyframes bob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-5px); } }
 
   .pose-drive #torsoGroup { transform: translateY(40px); transform-origin: 110px 165px; }
-  .pose-drive #lUpperLeg { transform: rotate(-75deg); }
-  .pose-drive #rUpperLeg { transform: rotate(75deg); }
-  .pose-drive #lLowerLeg { transform: rotate(70deg); }
-  .pose-drive #rLowerLeg { transform: rotate(-70deg); }
-  .pose-drive #rUpperArm { transform: rotate(75deg); }
-  .pose-drive #lUpperArm { transform: rotate(-75deg); }
+  .pose-drive #lUpperLeg { transform: rotate(-80deg); }
+  .pose-drive #rUpperLeg { transform: rotate(80deg); }
+  .pose-drive #lLowerLeg { transform: rotate(75deg); }
+  .pose-drive #rLowerLeg { transform: rotate(-75deg); }
+  .pose-drive #rUpperArm { transform: rotate(35deg); }
+  .pose-drive #lUpperArm { transform: rotate(-35deg); }
   .pose-drive #rLowerArm { animation: steerR 1.6s ease-in-out infinite; }
   .pose-drive #lLowerArm { animation: steerL 1.6s ease-in-out infinite; }
-  @keyframes steerR { 0%,100% { transform: rotate(20deg); } 50% { transform: rotate(-10deg); } }
-  @keyframes steerL { 0%,100% { transform: rotate(-20deg); } 50% { transform: rotate(10deg); } }
+  @keyframes steerR { 0%,100% { transform: rotate(-65deg); } 50% { transform: rotate(-85deg); } }
+  @keyframes steerL { 0%,100% { transform: rotate(65deg); } 50% { transform: rotate(85deg); } }
 
   .pose-desk #torsoGroup { transform: translateY(40px) rotate(5deg); transform-origin: 110px 165px; }
-  .pose-desk #lUpperLeg { transform: rotate(-75deg); }
-  .pose-desk #rUpperLeg { transform: rotate(75deg); }
-  .pose-desk #lLowerLeg { transform: rotate(70deg); }
-  .pose-desk #rLowerLeg { transform: rotate(-70deg); }
-  .pose-desk #rUpperArm { transform: rotate(70deg); }
-  .pose-desk #lUpperArm { transform: rotate(-70deg); }
+  .pose-desk #lUpperLeg { transform: rotate(-80deg); }
+  .pose-desk #rUpperLeg { transform: rotate(80deg); }
+  .pose-desk #lLowerLeg { transform: rotate(75deg); }
+  .pose-desk #rLowerLeg { transform: rotate(-75deg); }
+  .pose-desk #rUpperArm { transform: rotate(40deg); }
+  .pose-desk #lUpperArm { transform: rotate(-40deg); }
   .pose-desk #rLowerArm { animation: typeR 0.5s ease-in-out infinite; }
   .pose-desk #lLowerArm { animation: typeL 0.5s ease-in-out infinite; }
-  @keyframes typeR { 0%,100% { transform: rotate(30deg); } 50% { transform: rotate(45deg); } }
-  @keyframes typeL { 0%,100% { transform: rotate(-30deg); } 50% { transform: rotate(-45deg); } }
+  @keyframes typeR { 0%,100% { transform: rotate(-60deg); } 50% { transform: rotate(-48deg); } }
+  @keyframes typeL { 0%,100% { transform: rotate(60deg); } 50% { transform: rotate(48deg); } }
 
   .pose-eat #rUpperArm { animation: eatArm 1.4s ease-in-out infinite; }
   .pose-eat #rLowerArm { animation: eatForearm 1.4s ease-in-out infinite; }
-  .pose-eat #lUpperArm { transform: rotate(-40deg); }
-  .pose-eat #lUpperLeg { transform: rotate(-75deg); }
-  .pose-eat #rUpperLeg { transform: rotate(75deg); }
-  .pose-eat #lLowerLeg { transform: rotate(70deg); }
-  .pose-eat #rLowerLeg { transform: rotate(-70deg); }
-  @keyframes eatArm { 0%,60%,100% { transform: rotate(60deg); } 30% { transform: rotate(130deg); } }
-  @keyframes eatForearm { 0%,60%,100% { transform: rotate(10deg); } 30% { transform: rotate(90deg); } }
+  .pose-eat #lUpperArm { transform: rotate(-20deg); }
+  .pose-eat #lUpperLeg { transform: rotate(-80deg); }
+  .pose-eat #rUpperLeg { transform: rotate(80deg); }
+  .pose-eat #lLowerLeg { transform: rotate(75deg); }
+  .pose-eat #rLowerLeg { transform: rotate(-75deg); }
+  @keyframes eatArm { 0%,60%,100% { transform: rotate(25deg); } 30% { transform: rotate(45deg); } }
+  @keyframes eatForearm { 0%,60%,100% { transform: rotate(-70deg); } 30% { transform: rotate(-130deg); } }
 
   #character.pose-sleep {
     transform: translateX(-50%) rotate(90deg) translate(0, 75px);
@@ -363,39 +364,68 @@
       </defs>
 
       <g id="torsoGroup">
+        <!-- back arm drawn first so it tucks behind the torso -->
+        <g transform="translate(86,92)">
+          <g id="lUpperArm" class="limbGroup">
+            <rect class="armSkin" x="-9" y="-4" width="18" height="50" rx="9"/>
+            <g transform="translate(0,46)">
+              <g id="lLowerArm" class="limbGroup">
+                <rect class="armSkin" x="-8" y="0" width="16" height="42" rx="8"/>
+                <circle class="hand" cx="0" cy="42" r="9"/>
+              </g>
+            </g>
+          </g>
+        </g>
+
+        <!-- hips + torso + shoulders, tapered -->
+        <path class="torsoShirt" d="M90,92 Q110,84 130,92 L126,160 Q110,168 94,160 Z"/>
+        <rect x="101" y="76" width="18" height="18" rx="6" fill="#e6a868"/>
+
         <g id="headGroup">
-          <circle class="headFill" cx="110" cy="55" r="26"/>
-          <path class="hair" d="M84,46 a26,26 0 0 1 52,0 q-4,-14 -26,-14 t-26,14 z"/>
-          <line class="faceFeature" x1="100" y1="58" x2="103" y2="58"/>
-          <line class="faceFeature" x1="117" y1="58" x2="120" y2="58"/>
-          <path class="faceFeature" d="M101,68 q9,7 18,0"/>
+          <circle class="headFill" cx="110" cy="52" r="26"/>
+          <path class="hair" d="M84,43 a26,26 0 0 1 52,0 q-4,-14 -26,-14 t-26,14 z"/>
+          <line class="faceFeature" x1="100" y1="55" x2="103" y2="55"/>
+          <line class="faceFeature" x1="117" y1="55" x2="120" y2="55"/>
+          <path class="faceFeature" d="M101,65 q9,7 18,0"/>
         </g>
-        <line class="torsoShirt" x1="110" y1="82" x2="110" y2="165"/>
 
-        <g id="rUpperArm">
-          <line class="limb armSkin" x1="110" y1="92" x2="110" y2="138"/>
-          <g id="rLowerArm">
-            <line class="limb armSkin" x1="110" y1="138" x2="110" y2="178"/>
-          </g>
-        </g>
-        <g id="lUpperArm">
-          <line class="limb armSkin" x1="110" y1="92" x2="110" y2="138"/>
-          <g id="lLowerArm">
-            <line class="limb armSkin" x1="110" y1="138" x2="110" y2="178"/>
+        <!-- front arm drawn after torso so it overlaps naturally -->
+        <g transform="translate(134,92)">
+          <g id="rUpperArm" class="limbGroup">
+            <rect class="armSkin" x="-9" y="-4" width="18" height="50" rx="9"/>
+            <g transform="translate(0,46)">
+              <g id="rLowerArm" class="limbGroup">
+                <rect class="armSkin" x="-8" y="0" width="16" height="42" rx="8"/>
+                <circle class="hand" cx="0" cy="42" r="9"/>
+              </g>
+            </g>
           </g>
         </g>
       </g>
 
-      <g id="rUpperLeg">
-        <line class="limb legPant" x1="110" y1="165" x2="110" y2="225"/>
-        <g id="rLowerLeg">
-          <line class="limb legPant" x1="110" y1="225" x2="110" y2="280"/>
+      <!-- back leg -->
+      <g transform="translate(98,160)">
+        <g id="lUpperLeg" class="limbGroup">
+          <rect class="legPant" x="-10" y="-2" width="20" height="62" rx="9"/>
+          <g transform="translate(0,58)">
+            <g id="lLowerLeg" class="limbGroup">
+              <rect class="legPant" x="-9" y="0" width="18" height="55" rx="8"/>
+              <rect class="shoe" x="-11" y="52" width="26" height="12" rx="6"/>
+            </g>
+          </g>
         </g>
       </g>
-      <g id="lUpperLeg">
-        <line class="limb legPant" x1="110" y1="165" x2="110" y2="225"/>
-        <g id="lLowerLeg">
-          <line class="limb legPant" x1="110" y1="225" x2="110" y2="280"/>
+
+      <!-- front leg -->
+      <g transform="translate(122,160)">
+        <g id="rUpperLeg" class="limbGroup">
+          <rect class="legPant" x="-10" y="-2" width="20" height="62" rx="9"/>
+          <g transform="translate(0,58)">
+            <g id="rLowerLeg" class="limbGroup">
+              <rect class="legPant" x="-9" y="0" width="18" height="55" rx="8"/>
+              <rect class="shoe" x="-11" y="52" width="26" height="12" rx="6"/>
+            </g>
+          </g>
         </g>
       </g>
 
