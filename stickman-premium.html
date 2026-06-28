@@ -192,11 +192,11 @@
   @keyframes walkArmL { 0%,100% { transform: rotate(25deg); } 50% { transform: rotate(-25deg); } }
   @keyframes bob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-5px); } }
 
-  .pose-drive #torsoGroup { transform: translateY(40px); transform-origin: 110px 165px; }
-  .pose-drive #lUpperLeg { transform: rotate(-80deg); }
-  .pose-drive #rUpperLeg { transform: rotate(80deg); }
-  .pose-drive #lLowerLeg { transform: rotate(75deg); }
-  .pose-drive #rLowerLeg { transform: rotate(-75deg); }
+  .pose-drive #torsoGroup { transform: rotate(0deg); transform-origin: 110px 165px; }
+  .pose-drive #lUpperLeg { transform: rotate(-18deg); }
+  .pose-drive #rUpperLeg { transform: rotate(18deg); }
+  .pose-drive #lLowerLeg { transform: rotate(12deg); }
+  .pose-drive #rLowerLeg { transform: rotate(-12deg); }
   .pose-drive #rUpperArm { transform: rotate(35deg); }
   .pose-drive #lUpperArm { transform: rotate(-35deg); }
   .pose-drive #rLowerArm { animation: steerR 1.6s ease-in-out infinite; }
@@ -204,11 +204,11 @@
   @keyframes steerR { 0%,100% { transform: rotate(-65deg); } 50% { transform: rotate(-85deg); } }
   @keyframes steerL { 0%,100% { transform: rotate(65deg); } 50% { transform: rotate(85deg); } }
 
-  .pose-desk #torsoGroup { transform: translateY(40px) rotate(5deg); transform-origin: 110px 165px; }
-  .pose-desk #lUpperLeg { transform: rotate(-80deg); }
-  .pose-desk #rUpperLeg { transform: rotate(80deg); }
-  .pose-desk #lLowerLeg { transform: rotate(75deg); }
-  .pose-desk #rLowerLeg { transform: rotate(-75deg); }
+  .pose-desk #torsoGroup { transform: rotate(5deg); transform-origin: 110px 165px; }
+  .pose-desk #lUpperLeg { transform: rotate(-18deg); }
+  .pose-desk #rUpperLeg { transform: rotate(18deg); }
+  .pose-desk #lLowerLeg { transform: rotate(12deg); }
+  .pose-desk #rLowerLeg { transform: rotate(-12deg); }
   .pose-desk #rUpperArm { transform: rotate(40deg); }
   .pose-desk #lUpperArm { transform: rotate(-40deg); }
   .pose-desk #rLowerArm { animation: typeR 0.5s ease-in-out infinite; }
@@ -219,10 +219,10 @@
   .pose-eat #rUpperArm { animation: eatArm 1.4s ease-in-out infinite; }
   .pose-eat #rLowerArm { animation: eatForearm 1.4s ease-in-out infinite; }
   .pose-eat #lUpperArm { transform: rotate(-20deg); }
-  .pose-eat #lUpperLeg { transform: rotate(-80deg); }
-  .pose-eat #rUpperLeg { transform: rotate(80deg); }
-  .pose-eat #lLowerLeg { transform: rotate(75deg); }
-  .pose-eat #rLowerLeg { transform: rotate(-75deg); }
+  .pose-eat #lUpperLeg { transform: rotate(-18deg); }
+  .pose-eat #rUpperLeg { transform: rotate(18deg); }
+  .pose-eat #lLowerLeg { transform: rotate(12deg); }
+  .pose-eat #rLowerLeg { transform: rotate(-12deg); }
   @keyframes eatArm { 0%,60%,100% { transform: rotate(25deg); } 30% { transform: rotate(45deg); } }
   @keyframes eatForearm { 0%,60%,100% { transform: rotate(-70deg); } 30% { transform: rotate(-130deg); } }
 
@@ -337,8 +337,8 @@
     <svg class="sky" viewBox="0 0 800 450" preserveAspectRatio="none">
       <rect width="800" height="450" fill="#efe6da"/>
       <rect x="0" y="330" width="800" height="120" fill="#c8a878"/>
-      <rect x="250" y="180" width="300" height="160" rx="6" fill="#2b2b32"/>
-      <rect x="270" y="200" width="260" height="120" fill="#4ea8de" opacity="0.85"/>
+      <rect x="540" y="120" width="180" height="110" rx="6" fill="#2b2b32"/>
+      <rect x="554" y="134" width="152" height="82" fill="#9fd8f0" opacity="0.9"/>
     </svg>
   </div>
 
