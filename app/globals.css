@@ -1,0 +1,29 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--ink-black);
+  color: var(--warm-bone);
+  font-family: var(--font-body);
+}
+
+/* custom cursor owns the pointer visual on desktop; CustomCursor bails out
+   below 768px so the native cursor returns there automatically */
+@media (min-width: 768px) {
+  body {
+    cursor: none;
+  }
+  body a,
+  body button {
+    cursor: none;
+  }
+}

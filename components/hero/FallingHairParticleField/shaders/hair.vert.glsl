@@ -58,7 +58,7 @@ void main() {
   world += instanceDisplace;
 
   // cheap depth shade so far strands recede into --ink-black
-  vShade = smoothstep(-4.0, 1.5, instanceOffset.z);
+  vShade = smoothstep(-10.0, 3.0, instanceOffset.z);
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4(world, 1.0);
 }

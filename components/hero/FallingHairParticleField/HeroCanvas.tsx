@@ -64,33 +64,35 @@ function pickColor(r: number): THREE.Color {
 /* ------------------------------------------------------- clean-swept zone */
 
 /**
- * Headline mask: soft-edged ellipse 480x220px, 60px feather, centered on the
- * headline block. Spawn probability inside is reduced 85% — enforced as a
- * rejection check at instance-init time (re-sample position), never a runtime
- * visibility toggle.
+ * Headline mask: soft-edged ellipse 480x220px, 60px feather, spawn probability
+ * inside reduced 85% — enforced as a rejection check at instance-init time
+ * (re-sample position), never a runtime visibility toggle.
+ *
+ * Because the fall wraps every strand through the full viewport height, a
+ * spawn-time Y check is unenforceable (spawn Y is only a phase offset) — so
+ * the mask reduces to its feathered X-profile, thinning a vertical column the
+ * width of the ellipse around the headline.
  */
 function makeSpawnSampler(viewport: { width: number; height: number }, pxPerUnit: number) {
   const rx = 480 / 2 / pxPerUnit;
-  const ry = 220 / 2 / pxPerUnit;
   const feather = 60 / pxPerUnit;
-  // ellipse center matches the headline baseline (62vh from top => below mid)
-  const cx = 0;
-  const cy = viewport.height * (0.5 - 0.62);
+  const cx = 0; // headline column center
+
+  const spawnZ = () => -10 + Math.random() * 13;
 
   return function sample(out: THREE.Vector3) {
     for (let attempt = 0; attempt < 16; attempt++) {
       const x = (Math.random() - 0.5) * viewport.width * 1.2;
       const y = (Math.random() - 0.5) * viewport.height;
-      // normalized ellipse distance, feathered edge: 0 at center -> 1 outside
-      const nd = Math.hypot((x - cx) / (rx + feather), (y - cy) / (ry + feather));
-      const inside = 1 - THREE.MathUtils.smoothstep(nd, rx / (rx + feather), 1);
+      // feathered profile: 1 at column center -> 0 past rx + feather
+      const inside = 1 - THREE.MathUtils.smoothstep(Math.abs(x - cx), rx, rx + feather);
       if (Math.random() > inside * 0.85) {
-        out.set(x, y, -4 + Math.random() * 5.5);
+        out.set(x, y, spawnZ());
         return;
       }
     }
     // pathological RNG streak: accept last sample rather than loop forever
-    out.set((Math.random() - 0.5) * viewport.width * 1.2, 0, -4 + Math.random() * 5.5);
+    out.set((Math.random() - 0.5) * viewport.width * 1.2, 0, spawnZ());
   };
 }
 
@@ -239,11 +241,12 @@ export default function HeroCanvas() {
     }
     setCount(w < breakpoints.desktop ? COUNT_TABLET : COUNT_DESKTOP);
     // lazy-mount after LCP-critical DOM paints (Performance Contract)
-    const id = requestIdleCallback
-      ? requestIdleCallback(() => setMode('webgl'))
+    const hasIdle = 'requestIdleCallback' in window;
+    const id = hasIdle
+      ? window.requestIdleCallback(() => setMode('webgl'))
       : window.setTimeout(() => setMode('webgl'), 200);
     return () => {
-      if (requestIdleCallback) cancelIdleCallback(id as number);
+      if (hasIdle) window.cancelIdleCallback(id as number);
       else window.clearTimeout(id as number);
     };
   }, []);
@@ -253,7 +256,7 @@ export default function HeroCanvas() {
   if (mode === 'poster') {
     return (
       <img
-        src="/images/hero/falling-hair-poster.jpg"
+        src="/images/hero/falling-hair-poster.svg"
         alt=""
         aria-hidden="true"
         className="hero-poster motion-entrance"
@@ -266,7 +269,7 @@ export default function HeroCanvas() {
     <Canvas
       dpr={[perf.dprRange[0], perf.dprRange[1]]}
       gl={{ antialias: true, alpha: false }}
-      camera={{ position: [0, 0, 6], fov: 45 }}
+      camera={{ position: [0, 0, 14], fov: 45 }}
       style={{ position: 'fixed', inset: 0, zIndex: 0, background: colors.inkBlack }}
       onCreated={({ gl }) => gl.setClearColor(colors.inkBlack)}
     >

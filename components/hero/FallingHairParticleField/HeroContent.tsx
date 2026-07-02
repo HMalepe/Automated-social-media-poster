@@ -41,13 +41,36 @@ export default function HeroContent() {
           paddingInline: 'var(--grid-margin)',
         }}
       >
-        <p className="type-kicker">Est. wherever you stand</p>
-        <h1 className="type-display" style={{ marginTop: 'calc(var(--space-unit) * 2)' }}>
+        {/* soft scrim pairing with the clean-swept spawn mask — keeps the
+            type >=4.5:1 against the lightest strands (Accessibility Contract:
+            validate against the lightest point, not the resting state) */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 'min(880px, 100vw)',
+            height: '70vh',
+            background:
+              'radial-gradient(ellipse closest-side at 50% 60%, rgba(11,11,12,0.85), rgba(11,11,12,0.5) 55%, transparent)',
+            pointerEvents: 'none',
+          }}
+        />
+        <p className="type-kicker" style={{ position: 'relative' }}>Est. wherever you stand</p>
+        <h1
+          className="type-display"
+          style={{ position: 'relative', marginTop: 'calc(var(--space-unit) * 2)' }}
+        >
           The moment
           <br />
           after the cut
         </h1>
-        <p className="type-subhead" style={{ marginTop: 'calc(var(--space-unit) * 3)' }}>
+        <p
+          className="type-subhead"
+          style={{ position: 'relative', marginTop: 'calc(var(--space-unit) * 3)' }}
+        >
           Precision fades, straight-razor finishes, and the kind of quiet a
           good chair earns. Walk out lighter.
         </p>
@@ -55,6 +78,7 @@ export default function HeroContent() {
           href="#book"
           className="type-ui"
           style={{
+            position: 'relative',
             marginTop: 'calc(var(--space-unit) * 4)',
             color: 'var(--ink-black)',
             background: 'var(--barber-gold)',

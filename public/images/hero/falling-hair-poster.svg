@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 1334" preserveAspectRatio="xMidYMid slice">
+  <!-- static poster frame for mobile / reduced-motion (Responsive Contract) -->
+  <rect width="750" height="1334" fill="#0B0B0C"/>
+  <g stroke-linecap="round" fill="none">
+    <path d="M96 120q14 60-8 118" stroke="#232324" stroke-width="3"/>
+    <path d="M210 340q-20 55 6 112" stroke="#4A3428" stroke-width="3"/>
+    <path d="M320 90q18 70-10 130" stroke="#232324" stroke-width="2.5"/>
+    <path d="M455 260q-16 62 12 118" stroke="#232324" stroke-width="3"/>
+    <path d="M580 130q20 66-6 126" stroke="#4A3428" stroke-width="2.5"/>
+    <path d="M660 380q-18 58 8 114" stroke="#93908A" stroke-width="2"/>
+    <path d="M140 560q16 64-10 122" stroke="#232324" stroke-width="3"/>
+    <path d="M620 640q-20 60 8 116" stroke="#4A3428" stroke-width="3"/>
+    <path d="M80 900q14 58-8 112" stroke="#232324" stroke-width="2.5"/>
+    <path d="M300 1020q-16 60 10 116" stroke="#4A3428" stroke-width="3"/>
+    <path d="M520 960q18 64-8 122" stroke="#232324" stroke-width="3"/>
+    <path d="M680 1080q-14 56 8 110" stroke="#93908A" stroke-width="2"/>
+    <path d="M400 480q10 40-6 78" stroke="#232324" stroke-width="2"/>
+    <path d="M240 760q-12 44 8 84" stroke="#232324" stroke-width="2"/>
+  </g>
+</svg>

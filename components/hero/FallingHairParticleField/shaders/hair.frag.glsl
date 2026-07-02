@@ -10,6 +10,6 @@ varying vec3 vColor;
 varying float vShade;
 
 void main() {
-  vec3 col = mix(uBackground, vColor, 0.35 + vShade * 0.65);
+  vec3 col = mix(uBackground, vColor, 0.18 + vShade * 0.55);
   gl_FragColor = vec4(col, 1.0);
 }
