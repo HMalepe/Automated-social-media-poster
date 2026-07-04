@@ -221,9 +221,15 @@ logged with `cost_usd: 0` — a real number, not a null placeholder.
   (`qa_passed` or `assets_generated`) before allowing the transition (409
   otherwise) — see "Deviations".
 - `app/api/content-items/[id]/approve/route.ts` — companion endpoint,
-  `POST` with no body, sets `stage = 'scheduled'`. Same stage guard as
-  reject. Doesn't touch `rejected_by`/`rejection_reason` — it doesn't
-  generate feedback-loop data itself, per the brief.
+  `POST` with an optional `{ scheduledAt?: string }` body (ISO timestamp;
+  defaults to "now"). Sets `scheduled_at` accordingly — corrected from an
+  earlier `stage = 'scheduled'` write once Phase 5 revealed its publish
+  scheduler actually queries `stage = 'assets_generated' AND scheduled_at
+  <= now()` and never looks for `stage = 'scheduled'` at all; see that
+  route's own comment and Phase 5's README section below for the full
+  story. Same stage guard as reject. Doesn't touch `rejected_by`/
+  `rejection_reason` — it doesn't generate feedback-loop data itself, per
+  the brief.
 - `lib/getRecentRejections.ts` — `getRecentRejectionsContext()`. Queries
   the 15 most recently updated `content_items` with a non-null
   `rejection_reason` (from either rejection source — see "Deviations" for
