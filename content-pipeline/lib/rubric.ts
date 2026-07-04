@@ -85,6 +85,6 @@ export const QA_AXES: QaAxisDefinition[] = [
   {
     name: "Banned phrase scan",
     passCriteria: "Clean.",
-    failCriteria: "Contains any list-4 phrase.",
+    failCriteria: "Contains any list-5 phrase.",
   },
 ];
