@@ -1,7 +1,3 @@
-from pathlib import Path
-
-import pytest
-
 from ai_social_pipeline.platforms.media import media_kind, resolve_media_path
 
 
